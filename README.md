@@ -12,4 +12,4 @@
    - Works with SMTP servers in STARTTLS mode only. Does not support connecting to SMTP/SSL, SMTP over SSL, or SMTPS server on default port 465.
 5. Runs on Windows.
 
-![Image of Software](https://i.imgur.com/Z7NCEcm.png)
+![Image of Software](https://imgur.com/a/ChScgHp)
