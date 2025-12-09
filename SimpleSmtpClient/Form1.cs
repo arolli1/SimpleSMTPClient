@@ -43,30 +43,50 @@ namespace SimpleSmtpClient
                 }
                 if (guiUseSsl.Checked)
                 {
+                    // Enable TLS/SSL encryption for SMTP connection
                     client.EnableSsl = true;
 
-                    int sslVer = cmbSSLVersion.SelectedIndex;
-                    if (sslVer == 0 || sslVer == -1)
+                    // Set the TLS protocol version based on user selection
+                    int tlsVersionIndex = cmbSSLVersion.SelectedIndex;
+                    if (tlsVersionIndex == 0 || tlsVersionIndex == -1)
                     {
+                        // Auto/System Default - allows the system to negotiate the best available protocol
                         System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;
                     }
-                    else if (sslVer == 1)
+                    else if (tlsVersionIndex == 1)
                     {
-                        System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
-                    }
-                    else if (sslVer == 2)
-                    {
+                        // TLS 1.0
                         System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
                     }
-                    else if (sslVer == 3)
+                    else if (tlsVersionIndex == 2)
                     {
+                        // TLS 1.1
                         System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11;
                     }
-                    else if (sslVer == 4)
+                    else if (tlsVersionIndex == 3)
                     {
+                        // TLS 1.2 (recommended for security)
                         System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                     }
-                    //tls 1.3 not supported by .net framework 4.8 as of now.
+                    else if (tlsVersionIndex == 4)
+                    {
+                        // TLS 1.3 - Check if supported by the runtime
+                        // Note: TLS 1.3 support depends on Windows version (Windows 11/Server 2022+) 
+                        // and .NET Framework updates. If not available, fall back to TLS 1.2.
+                        try
+                        {
+                            // TLS 1.3 protocol value: 0x3000 (12288)
+                            // SecurityProtocolType.Tls13 enum is not available in .NET Framework 4.8,
+                            // so we use the numeric value directly
+                            const int TLS13_PROTOCOL_VALUE = 0x3000;
+                            System.Net.ServicePointManager.SecurityProtocol = (SecurityProtocolType)TLS13_PROTOCOL_VALUE;
+                        }
+                        catch (Exception)
+                        {
+                            // Fall back to TLS 1.2 if TLS 1.3 is not supported by the system
+                            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                        }
+                    }
                 }
                 MailMessage message = CreateMailMessage();
                 client.Send(message);

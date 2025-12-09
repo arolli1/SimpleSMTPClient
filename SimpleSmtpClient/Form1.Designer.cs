@@ -82,9 +82,9 @@
             this.guiUseSsl.AutoSize = true;
             this.guiUseSsl.Location = new System.Drawing.Point(25, 97);
             this.guiUseSsl.Name = "guiUseSsl";
-            this.guiUseSsl.Size = new System.Drawing.Size(68, 17);
+            this.guiUseSsl.Size = new System.Drawing.Size(100, 17);
             this.guiUseSsl.TabIndex = 6;
-            this.guiUseSsl.Text = "Use SSL";
+            this.guiUseSsl.Text = "Use TLS/SSL";
             this.guiUseSsl.UseVisualStyleBackColor = true;
             // 
             // guiPassword
@@ -260,15 +260,16 @@
             // 
             this.cmbSSLVersion.FormattingEnabled = true;
             this.cmbSSLVersion.Items.AddRange(new object[] {
-            "Auto",
-            "SSL3",
+            "Auto (System Default)",
             "TLS 1.0",
             "TLS 1.1",
-            "TLS 1.2"});
+            "TLS 1.2",
+            "TLS 1.3"});
             this.cmbSSLVersion.Location = new System.Drawing.Point(400, 95);
             this.cmbSSLVersion.Name = "cmbSSLVersion";
             this.cmbSSLVersion.Size = new System.Drawing.Size(121, 21);
             this.cmbSSLVersion.TabIndex = 7;
+            this.cmbSSLVersion.SelectedIndex = 0;
             // 
             // lblSSLVersion
             // 
@@ -277,7 +278,7 @@
             this.lblSSLVersion.Name = "lblSSLVersion";
             this.lblSSLVersion.Size = new System.Drawing.Size(96, 13);
             this.lblSSLVersion.TabIndex = 10;
-            this.lblSSLVersion.Text = "SSL / TLS Version";
+            this.lblSSLVersion.Text = "TLS Version";
             // 
             // mainForm
             // 
