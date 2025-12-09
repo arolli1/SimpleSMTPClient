@@ -15,4 +15,4 @@
 5. Runs on Windows (requires .NET 7 Runtime or later).
 6. **Modern async/await** implementation for better performance and responsiveness.
 
-![Image of Software](https://imgur.com/a/ChScgHp)
+![Image of Software](https://i.imgur.com/Z7NCEcm.png)
