@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net.Mail;
-using System.Net;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
 
 namespace SimpleSmtpClient
 {
@@ -29,84 +25,86 @@ namespace SimpleSmtpClient
             }
         }
 
-        private void guiSendMail_Click(object sender, EventArgs e)
+        private async void guiSendMail_Click(object sender, EventArgs e)
         {
             try
             {
-                SmtpClient client = new SmtpClient();
-                client.Host = guiServerName.Text;
-                client.Port = Convert.ToInt32(guiPort.Text);
-                if (guiUseCredentials.Checked)
-                {
-                    client.UseDefaultCredentials = false;
-                    client.Credentials = new NetworkCredential(guiUser.Text, guiPassword.Text);
-                }
-                if (guiUseSsl.Checked)
-                {
-                    // Enable TLS/SSL encryption for SMTP connection
-                    client.EnableSsl = true;
+                // Disable the button to prevent multiple clicks
+                guiSendMail.Enabled = false;
+                guiSendMail.Text = "Sending...";
 
-                    // Set the TLS protocol version based on user selection
-                    int tlsVersionIndex = cmbSSLVersion.SelectedIndex;
-                    if (tlsVersionIndex == 0 || tlsVersionIndex == -1)
+                using (var client = new SmtpClient())
+                {
+                    // Configure server connection
+                    string host = guiServerName.Text;
+                    int port = Convert.ToInt32(guiPort.Text);
+
+                    // Determine SSL/TLS options based on user selection
+                    SecureSocketOptions socketOptions = SecureSocketOptions.None;
+                    if (guiUseSsl.Checked)
                     {
-                        // Auto/System Default - allows the system to negotiate the best available protocol
-                        System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;
-                    }
-                    else if (tlsVersionIndex == 1)
-                    {
-                        // TLS 1.0
-                        System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
-                    }
-                    else if (tlsVersionIndex == 2)
-                    {
-                        // TLS 1.1
-                        System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11;
-                    }
-                    else if (tlsVersionIndex == 3)
-                    {
-                        // TLS 1.2 (recommended for security)
-                        System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                    }
-                    else if (tlsVersionIndex == 4)
-                    {
-                        // TLS 1.3 - Check if supported by the runtime
-                        // Note: TLS 1.3 support depends on Windows version (Windows 11/Server 2022+) 
-                        // and .NET Framework updates. If not available, fall back to TLS 1.2.
-                        try
+                        // Get TLS version selection
+                        int tlsVersionIndex = cmbSSLVersion.SelectedIndex;
+                        
+                        // MailKit handles TLS negotiation automatically, but we can specify preferences
+                        // For STARTTLS (most common), use Auto which will negotiate the best available protocol
+                        if (tlsVersionIndex == 0 || tlsVersionIndex == -1)
                         {
-                            // TLS 1.3 protocol value: 0x3000 (12288)
-                            // SecurityProtocolType.Tls13 enum is not available in .NET Framework 4.8,
-                            // so we use the numeric value directly
-                            const int TLS13_PROTOCOL_VALUE = 0x3000;
-                            System.Net.ServicePointManager.SecurityProtocol = (SecurityProtocolType)TLS13_PROTOCOL_VALUE;
+                            // Auto - MailKit will negotiate the best available TLS version
+                            socketOptions = SecureSocketOptions.Auto;
                         }
-                        catch (Exception)
+                        else
                         {
-                            // Fall back to TLS 1.2 if TLS 1.3 is not supported by the system
-                            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                            // For explicit TLS versions, use StartTls
+                            // MailKit will use the system's default TLS version, which in .NET 8
+                            // defaults to TLS 1.2 or higher (including TLS 1.3 if available)
+                            socketOptions = SecureSocketOptions.StartTls;
                         }
                     }
-                }
-                MailMessage message = CreateMailMessage();
-                client.Send(message);
-                MessageBox.Show("Email Sent.");
 
+                    // Connect to the server
+                    await client.ConnectAsync(host, port, socketOptions);
+
+                    // Authenticate if credentials are provided
+                    if (guiUseCredentials.Checked && !string.IsNullOrWhiteSpace(guiUser.Text))
+                    {
+                        await client.AuthenticateAsync(guiUser.Text, guiPassword.Text);
+                    }
+
+                    // Create and send the message
+                    var message = CreateMailMessage();
+                    await client.SendAsync(message);
+
+                    // Disconnect
+                    await client.DisconnectAsync(true);
+
+                    MessageBox.Show("Email Sent.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Error sending email: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Re-enable the button
+                guiSendMail.Enabled = true;
+                guiSendMail.Text = "Send Mail";
             }
         }
 
-        private MailMessage CreateMailMessage()
+        private MimeMessage CreateMailMessage()
         {
-            MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress(guiEmailFrom.Text);
-            mailMessage.To.Add(guiEmailTo.Text);
-            mailMessage.Body = guiEmailBody.Text;
-            mailMessage.Subject = guiEmailSubject.Text;
-            return mailMessage;
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress(string.Empty, guiEmailFrom.Text));
+            message.To.Add(new MailboxAddress(string.Empty, guiEmailTo.Text));
+            message.Subject = guiEmailSubject.Text;
+            message.Body = new TextPart("plain")
+            {
+                Text = guiEmailBody.Text
+            };
+            return message;
         }
     }
 }
+
