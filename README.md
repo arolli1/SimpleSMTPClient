@@ -34,4 +34,4 @@ Settings and logs are stored in:
 
 **Note:** Passwords are never saved to disk for security reasons.
 
-![Image of Software]([https://i.imgur.com/WUcuDFx.png](https://i.imgur.com/fFRQPxg.png))
+![Image of Software](https://i.imgur.com/fFRQPxg.png)
