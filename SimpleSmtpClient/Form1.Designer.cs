@@ -1,34 +1,34 @@
-namespace SimpleSmtpClient
+namespace SimpleSmtpClient;
+
+partial class MainForm
 {
-    partial class MainForm
+    /// <summary>
+    /// Required designer variable.
+    /// </summary>
+    private System.ComponentModel.IContainer components = null;
+
+    /// <summary>
+    /// Clean up any resources being used.
+    /// </summary>
+    /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+    protected override void Dispose(bool disposing)
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
+        if (disposing && (components != null))
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
+            components.Dispose();
         }
+        base.Dispose(disposing);
+    }
 
-        #region Windows Form Designer generated code
+    #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+    /// <summary>
+    /// Required method for Designer support - do not modify
+    /// the contents of this method with the code editor.
+    /// </summary>
+    private void InitializeComponent()
+    {
+        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.serverGroup = new System.Windows.Forms.GroupBox();
             this.guiUseSsl = new System.Windows.Forms.CheckBox();
             this.guiPassword = new System.Windows.Forms.TextBox();
@@ -328,9 +328,8 @@ namespace SimpleSmtpClient
         private System.Windows.Forms.TextBox guiEmailFrom;
         private System.Windows.Forms.Label lblEmailFrom;
         private System.Windows.Forms.Button guiSendMail;
-        private System.Windows.Forms.CheckBox guiUseSsl;
-        private System.Windows.Forms.Label lblSSLVersion;
-        private System.Windows.Forms.ComboBox cmbSSLVersion;
-    }
+    private System.Windows.Forms.CheckBox guiUseSsl;
+    private System.Windows.Forms.Label lblSSLVersion;
+    private System.Windows.Forms.ComboBox cmbSSLVersion;
 }
 
