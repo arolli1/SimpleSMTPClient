@@ -1,28 +1,31 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>SimpleSmtpClient</AssemblyName>
     <RootNamespace>SimpleSmtpClient</RootNamespace>
-    <Version>3.0.0</Version>
-    <FileVersion>3.0.0</FileVersion>
-    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <Version>4.0.0</Version>
+    <FileVersion>4.0.0</FileVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
     <Copyright>Copyright © 2025</Copyright>
     <Product>Simple SMTP Client</Product>
     <Description>Simple SMTP Windows Client for Testing SMTP Server</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="4.8.0" />
+    <PackageReference Include="MailKit" Version="4.9.0" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="LogViewerForm.resx">
+      <DependentUpon>LogViewerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
