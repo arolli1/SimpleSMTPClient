@@ -1,6 +1,6 @@
-﻿namespace SimpleSmtpClient
+namespace SimpleSmtpClient
 {
-    partial class mainForm
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.serverGroup = new System.Windows.Forms.GroupBox();
             this.guiUseSsl = new System.Windows.Forms.CheckBox();
             this.guiPassword = new System.Windows.Forms.TextBox();
@@ -86,11 +86,13 @@
             this.guiUseSsl.TabIndex = 6;
             this.guiUseSsl.Text = "Use TLS/SSL";
             this.guiUseSsl.UseVisualStyleBackColor = true;
+            this.guiUseSsl.CheckedChanged += new System.EventHandler(this.guiUseSsl_CheckedChanged);
             // 
             // guiPassword
             // 
             this.guiPassword.Location = new System.Drawing.Point(434, 66);
             this.guiPassword.Name = "guiPassword";
+            this.guiPassword.PasswordChar = '●';
             this.guiPassword.ReadOnly = true;
             this.guiPassword.Size = new System.Drawing.Size(87, 20);
             this.guiPassword.TabIndex = 5;
@@ -138,6 +140,7 @@
             this.guiPort.Name = "guiPort";
             this.guiPort.Size = new System.Drawing.Size(73, 20);
             this.guiPort.TabIndex = 2;
+            this.guiPort.Text = "587";
             // 
             // lblPort
             // 
@@ -258,6 +261,7 @@
             // 
             // cmbSSLVersion
             // 
+            this.cmbSSLVersion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSSLVersion.FormattingEnabled = true;
             this.cmbSSLVersion.Items.AddRange(new object[] {
             "Auto (System Default)",
@@ -280,7 +284,7 @@
             this.lblSSLVersion.TabIndex = 10;
             this.lblSSLVersion.Text = "TLS Version";
             // 
-            // mainForm
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -291,8 +295,9 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.Name = "mainForm";
+            this.Name = "MainForm";
             this.Text = "Simple SMTP Client";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.serverGroup.ResumeLayout(false);
             this.serverGroup.PerformLayout();
             this.emailGroup.ResumeLayout(false);
